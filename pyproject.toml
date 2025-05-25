@@ -1,13 +1,16 @@
 [project]
-name = "python-uv-template"
+name = "credit-scout"
 version = "0.1.0"
-description = "Add your description here"
+description = "AI agent for movie credit detection"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "dotenv>=0.9.9",
     "rich>=13.9.4",
     "loguru>=0.7.2",
+    "openai-agents>=0.0.16",
+    "python-dotenv>=1.1.0",
+    "google-genai>=1.16.1",
 ]
 
 [build-system]
@@ -15,13 +18,13 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.version]
-path = "src/project/__version__.py"
+path = "src/credit_scout/__version__.py"
 
 [project.scripts]
-project = "project.main:cli"
+credit-scout = "credit_scout.main:cli"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/project"]
+packages = ["src/credit-scout"]
 
 [tool.ruff]
 # Enable the pycodestyle (`E`) and Pyflakes (`F`) rules by default
@@ -36,6 +39,11 @@ line-length = 120
 
 [tool.ruff.format]
 preview = true
+
+[tool.pytest.ini_options]
+markers = [
+    "integration: marks tests as integration tests (deselect with '-m \"not integration\"')",
+]
 
 [dependency-groups]
 dev = [

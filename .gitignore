@@ -181,3 +181,11 @@ cython_debug/
 .Trashes
 ehthumbs.db
 Thumbs.db
+.aider*
+
+# Test data files (video files for testing)
+tests/test_data/*.mp4
+tests/test_data/*.avi
+tests/test_data/*.mov
+tests/test_data/*.mkv
+tests/test_data/*.webm
