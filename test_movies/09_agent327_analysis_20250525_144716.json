@@ -1,0 +1,13 @@
+{
+  "intro_end_time": "00:05",
+  "outro_start_time": "03:28",
+  "total_cost": 0.15332249999999997,
+  "intro_confidence": null,
+  "outro_confidence": null,
+  "analysis_timestamp": "2025-05-25T14:47:16.810634",
+  "video_file": {
+    "name": "09_agent327.mp4",
+    "path": "/Users/patrickkalkman/projects/st/credit-scout/test_movies/09_agent327.mp4",
+    "size_bytes": 47545128
+  }
+}

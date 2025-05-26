@@ -1,0 +1,13 @@
+{
+  "intro_end_time": "00:06",
+  "outro_start_time": "03:14",
+  "total_cost": 0.173705,
+  "intro_confidence": null,
+  "outro_confidence": null,
+  "analysis_timestamp": "2025-05-25T14:41:00.572627",
+  "video_file": {
+    "name": "charge.webm",
+    "path": "/Users/patrickkalkman/projects/st/credit-scout/test_movies/charge.webm",
+    "size_bytes": 182981770
+  }
+}

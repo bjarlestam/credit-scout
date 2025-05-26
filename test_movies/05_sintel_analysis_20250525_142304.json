@@ -1,0 +1,13 @@
+{
+  "intro_end_time": "01:43",
+  "outro_start_time": "12:27",
+  "total_cost": 0.2966575,
+  "intro_confidence": null,
+  "outro_confidence": null,
+  "analysis_timestamp": "2025-05-25T14:23:04.477698",
+  "video_file": {
+    "name": "sintel.mkv",
+    "path": "/Users/patrickkalkman/projects/st/credit-scout/test_movies/sintel.mkv",
+    "size_bytes": 1172428172
+  }
+}

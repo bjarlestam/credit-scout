@@ -1,0 +1,13 @@
+{
+  "intro_end_time": null,
+  "outro_start_time": null,
+  "total_cost": null,
+  "intro_confidence": null,
+  "outro_confidence": null,
+  "analysis_timestamp": "2025-05-25T14:30:33.875482",
+  "video_file": {
+    "name": "bbb.mp4",
+    "path": "/Users/patrickkalkman/projects/st/credit-scout/test_movies/bbb.mp4",
+    "size_bytes": 276134947
+  }
+}

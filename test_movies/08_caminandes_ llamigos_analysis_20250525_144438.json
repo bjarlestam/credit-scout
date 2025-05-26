@@ -1,0 +1,13 @@
+{
+  "intro_end_time": "00:06",
+  "outro_start_time": "02:19",
+  "total_cost": 0.0994075,
+  "intro_confidence": null,
+  "outro_confidence": null,
+  "analysis_timestamp": "2025-05-25T14:44:38.908513",
+  "video_file": {
+    "name": "08_caminandes_ llamigos.mp4",
+    "path": "/Users/patrickkalkman/projects/st/credit-scout/test_movies/08_caminandes_ llamigos.mp4",
+    "size_bytes": 138945811
+  }
+}

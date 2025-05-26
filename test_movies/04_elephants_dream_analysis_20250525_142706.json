@@ -1,0 +1,13 @@
+{
+  "intro_end_time": "00:25",
+  "outro_start_time": "09:26",
+  "total_cost": 0.29665749999999996,
+  "intro_confidence": null,
+  "outro_confidence": null,
+  "analysis_timestamp": "2025-05-25T14:27:06.968209",
+  "video_file": {
+    "name": "elephants_dream.mp4",
+    "path": "/Users/patrickkalkman/projects/st/credit-scout/test_movies/elephants_dream.mp4",
+    "size_bytes": 67835590
+  }
+}
