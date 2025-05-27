@@ -27,8 +27,8 @@ parse_analysis_results = sar_module.parse_analysis_results
 import inspect
 
 # Get the actual save_analysis_results function that's wrapped by the FunctionTool
-# The original function is available via the .fn attribute for FunctionTool
-save_analysis_results_func = sar_module.save_analysis_results.fn
+# We will use the .run() method of the Tool object.
+save_analysis_results_func = sar_module.save_analysis_results.run
 
 
 def test_parse_complete_results():
