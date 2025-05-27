@@ -2,6 +2,9 @@
 """
 Manual testing script for credit-scout functions.
 
+# This file is not meant to be run with pytest
+# pytest: skip-file
+
 Usage:
     uv run scripts/test_functions.py encode_intro <video_path> [--duration 300] [--height 360] [--fps 15]
     uv run scripts/test_functions.py encode_outro <video_path> [--duration 600] [--height 360] [--fps 15]

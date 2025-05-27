@@ -23,7 +23,7 @@ import save_analysis_results as sar_module
 
 parse_analysis_results = sar_module.parse_analysis_results
 # Get the actual function from the FunctionTool
-save_analysis_results_func = sar_module.save_analysis_results
+save_analysis_results_func = sar_module.save_analysis_results.func
 
 
 def test_parse_complete_results():

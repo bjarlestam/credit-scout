@@ -91,7 +91,7 @@ class TestSaveAnalysisResults:
             """
 
             # Save the results
-            result = save_analysis_results(
+            result = save_analysis_results.func(
                 video_file_path=str(video_path), analysis_results=analysis_text, output_directory=temp_dir
             )
 
@@ -118,7 +118,7 @@ class TestSaveAnalysisResults:
 
     def test_save_results_nonexistent_video(self):
         """Test saving results for a non-existent video file."""
-        result = save_analysis_results(
+        result = save_analysis_results.func(
             video_file_path="/nonexistent/path/movie.mp4", analysis_results="Some analysis text"
         )
 
@@ -134,7 +134,7 @@ class TestSaveAnalysisResults:
             analysis_text = "Intro ends at: 02:15"
 
             # Save the results without specifying output directory
-            result = save_analysis_results(video_file_path=str(video_path), analysis_results=analysis_text)
+            result = save_analysis_results.func(video_file_path=str(video_path), analysis_results=analysis_text)
 
             # Check that the function returned success message
             assert "successfully saved" in result
@@ -153,7 +153,7 @@ class TestSaveAnalysisResults:
             analysis_text = "Intro ends at: 02:15"
 
             # Save the results
-            save_analysis_results(
+            save_analysis_results.func(
                 video_file_path=str(video_path), analysis_results=analysis_text, output_directory=temp_dir
             )
 

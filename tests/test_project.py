@@ -25,7 +25,8 @@ def test_package_importable():
 
 
 @mock.patch("os.system")
-def test_cli_execution(mock_system):
+@mock.patch("sys.argv", ["credit-scout", "/fake/path/movie.mp4"])
+def test_cli_execution(mock_system, mock_argv):
     """Test that the cli function calls os.system with the correct path."""
     cli()
     assert mock_system.called
