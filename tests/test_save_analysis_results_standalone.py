@@ -22,8 +22,10 @@ sys.path.insert(0, str(src_dir / "credit_scout" / "tools"))
 import save_analysis_results as sar_module
 
 parse_analysis_results = sar_module.parse_analysis_results
-# Access the function directly
-save_analysis_results_func = sar_module.save_analysis_results
+# We need to import the core function directly from the module
+# First, let's add the credit_scout module to the path
+sys.path.insert(0, str(src_dir / "credit_scout" / "tools"))
+from credit_scout.tools.save_analysis_results import save_analysis_results_core
 
 
 def test_parse_complete_results():
@@ -89,9 +91,8 @@ def test_save_results_success():
           - Outro start detection confidence: 1.0 (high confidence)
         """
 
-        # Mock the function call since FunctionTool is not directly callable in tests
-        # We'll call the underlying function that would be used by the tool
-        result = sar_module.save_analysis_results_core(
+        # Call the core function directly
+        result = save_analysis_results_core(
             video_file_path=str(video_path), analysis_results=analysis_text, output_directory=temp_dir
         )
 
@@ -128,9 +129,8 @@ def test_filename_format():
 
         analysis_text = "Intro ends at: 02:15"
 
-        # Mock the function call since FunctionTool is not directly callable in tests
-        # We'll call the underlying function that would be used by the tool
-        sar_module.save_analysis_results_core(
+        # Call the core function directly
+        save_analysis_results_core(
             video_file_path=str(video_path), analysis_results=analysis_text, output_directory=temp_dir
         )
 

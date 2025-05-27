@@ -46,6 +46,8 @@ preview = true
 markers = [
     "integration: marks tests as integration tests (deselect with '-m \"not integration\"')",
 ]
+# Explicitly ignore the scripts/test_functions.py file
+norecursedirs = ["scripts"]
 
 [dependency-groups]
 dev = [
