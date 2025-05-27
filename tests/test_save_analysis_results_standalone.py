@@ -22,10 +22,16 @@ sys.path.insert(0, str(src_dir / "credit_scout" / "tools"))
 import save_analysis_results as sar_module
 
 parse_analysis_results = sar_module.parse_analysis_results
-# We need to import the core function directly from the module
-# First, let's add the credit_scout module to the path
-sys.path.insert(0, str(src_dir / "credit_scout" / "tools"))
-from credit_scout.tools.save_analysis_results import save_analysis_results_core
+# We need to access the underlying function
+# First, let's examine the module to see what's available
+import inspect
+
+# Get the actual save_analysis_results function that's wrapped by the FunctionTool
+if hasattr(sar_module.save_analysis_results, '__wrapped__'):
+    save_analysis_results_func = sar_module.save_analysis_results.__wrapped__
+else:
+    # Fallback to the function itself
+    save_analysis_results_func = sar_module.save_analysis_results
 
 
 def test_parse_complete_results():
@@ -91,8 +97,8 @@ def test_save_results_success():
           - Outro start detection confidence: 1.0 (high confidence)
         """
 
-        # Call the core function directly
-        result = save_analysis_results_core(
+        # Call the function directly
+        result = save_analysis_results_func(
             video_file_path=str(video_path), analysis_results=analysis_text, output_directory=temp_dir
         )
 
@@ -129,8 +135,8 @@ def test_filename_format():
 
         analysis_text = "Intro ends at: 02:15"
 
-        # Call the core function directly
-        save_analysis_results_core(
+        # Call the function directly
+        save_analysis_results_func(
             video_file_path=str(video_path), analysis_results=analysis_text, output_directory=temp_dir
         )
 
