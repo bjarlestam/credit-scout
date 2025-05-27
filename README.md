@@ -10,7 +10,7 @@
 [![Python Version](https://img.shields.io/badge/python-3.12%2B-blue)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Credit Scout detects movie intro end and outro start timestamps using multimodal AI, for just $0.30 per movie instead of $6 with traditional APIs.
+Credit Scout detects movie intro end and outro start timestamps using multimodal AI, for just $0.30 per movie instead of $6 with traditional APIs. See this Medium article for more details: [Detecting Movie Intros and Outros with AI](https://medium.com/ai-advances/skip-intro-at-scale-how-i-built-netflixs-missing-feature-for-0-30-per-movie-12ef196bc3d8).
 
 ## ✨ Features
 
