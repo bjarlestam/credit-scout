@@ -27,11 +27,8 @@ parse_analysis_results = sar_module.parse_analysis_results
 import inspect
 
 # Get the actual save_analysis_results function that's wrapped by the FunctionTool
-if hasattr(sar_module.save_analysis_results, '__wrapped__'):
-    save_analysis_results_func = sar_module.save_analysis_results.__wrapped__
-else:
-    # Fallback to the function itself
-    save_analysis_results_func = sar_module.save_analysis_results
+# The original function is available via the .fn attribute for FunctionTool
+save_analysis_results_func = sar_module.save_analysis_results.fn
 
 
 def test_parse_complete_results():

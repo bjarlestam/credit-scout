@@ -91,12 +91,8 @@ class TestSaveAnalysisResults:
             """
 
             # Get the actual function that's wrapped by the FunctionTool
-            if hasattr(save_analysis_results, '__wrapped__'):
-                save_analysis_results_func = save_analysis_results.__wrapped__
-            else:
-                # Fallback to using the module's function directly
-                from credit_scout.tools.save_analysis_results import save_analysis_results as save_func
-                save_analysis_results_func = save_func
+            # The original function is available via the .fn attribute for FunctionTool
+            save_analysis_results_func = save_analysis_results.fn
             
             # Save the results
             result = save_analysis_results_func(
@@ -127,12 +123,8 @@ class TestSaveAnalysisResults:
     def test_save_results_nonexistent_video(self):
         """Test saving results for a non-existent video file."""
         # Get the actual function that's wrapped by the FunctionTool
-        if hasattr(save_analysis_results, '__wrapped__'):
-            save_analysis_results_func = save_analysis_results.__wrapped__
-        else:
-            # Fallback to using the module's function directly
-            from credit_scout.tools.save_analysis_results import save_analysis_results as save_func
-            save_analysis_results_func = save_func
+        # The original function is available via the .fn attribute for FunctionTool
+        save_analysis_results_func = save_analysis_results.fn
         
         result = save_analysis_results_func(
             video_file_path="/nonexistent/path/movie.mp4", analysis_results="Some analysis text"
@@ -150,12 +142,8 @@ class TestSaveAnalysisResults:
             analysis_text = "Intro ends at: 02:15"
 
             # Get the actual function that's wrapped by the FunctionTool
-            if hasattr(save_analysis_results, '__wrapped__'):
-                save_analysis_results_func = save_analysis_results.__wrapped__
-            else:
-                # Fallback to using the module's function directly
-                from credit_scout.tools.save_analysis_results import save_analysis_results as save_func
-                save_analysis_results_func = save_func
+            # The original function is available via the .fn attribute for FunctionTool
+            save_analysis_results_func = save_analysis_results.fn
             
             # Save the results without specifying output directory
             result = save_analysis_results_func(video_file_path=str(video_path), analysis_results=analysis_text)
@@ -177,12 +165,8 @@ class TestSaveAnalysisResults:
             analysis_text = "Intro ends at: 02:15"
 
             # Get the actual function that's wrapped by the FunctionTool
-            if hasattr(save_analysis_results, '__wrapped__'):
-                save_analysis_results_func = save_analysis_results.__wrapped__
-            else:
-                # Fallback to using the module's function directly
-                from credit_scout.tools.save_analysis_results import save_analysis_results as save_func
-                save_analysis_results_func = save_func
+            # The original function is available via the .fn attribute for FunctionTool
+            save_analysis_results_func = save_analysis_results.fn
             
             # Save the results
             save_analysis_results_func(

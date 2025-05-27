@@ -24,12 +24,14 @@ def test_package_importable():
     assert credit_scout is not None
 
 
-@mock.patch("os.system")
+@mock.patch("src.credit_scout.main.run_analysis")
 @mock.patch("sys.argv", ["credit-scout", "/fake/path/movie.mp4"])
-def test_cli_execution(mock_system):
-    """Test that the cli function calls os.system with the correct path."""
+@mock.patch("pathlib.Path.exists", return_value=True)
+def test_cli_execution(mock_path_exists, mock_run_analysis):
+    """Test that the cli function attempts to run analysis after validating inputs."""
     cli()
-    assert mock_system.called
+    mock_path_exists.assert_called_once()
+    mock_run_analysis.assert_called_once_with("/fake/path/movie.mp4")
 
 
 def test_simple_assertion():
