@@ -12,13 +12,18 @@ from pathlib import Path
 src_dir = Path(__file__).parent.parent / "src"
 sys.path.insert(0, str(src_dir))
 
+# Set dummy API keys for testing
+import os
+os.environ["OPENAI_API_KEY"] = "sk-dummy-key-for-testing"
+os.environ["GEMINI_API_KEY"] = "dummy-key-for-testing"
+
 # Import the module directly to avoid API key requirements
 sys.path.insert(0, str(src_dir / "credit_scout" / "tools"))
 import save_analysis_results as sar_module
 
 parse_analysis_results = sar_module.parse_analysis_results
 # Get the actual function from the FunctionTool
-save_analysis_results_func = sar_module.save_analysis_results.func
+save_analysis_results_func = sar_module.save_analysis_results
 
 
 def test_parse_complete_results():

@@ -6,12 +6,17 @@ This script tests the movie analysis agent with the sample video.
 """
 
 import asyncio
+import os
 import sys
 from pathlib import Path
 
 # Add src directory to Python path
 src_dir = Path(__file__).parent / "src"
 sys.path.insert(0, str(src_dir))
+
+# Set a dummy API key for testing
+os.environ["OPENAI_API_KEY"] = "sk-dummy-key-for-testing"
+os.environ["GEMINI_API_KEY"] = "dummy-key-for-testing"
 
 from credit_scout.movie_analysis_agent import analyze_movie
 from rich.console import Console

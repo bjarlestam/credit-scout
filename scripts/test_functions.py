@@ -27,6 +27,10 @@ from pathlib import Path
 src_path = Path(__file__).parent.parent / "src"
 sys.path.insert(0, str(src_path))
 
+# Set dummy API keys for testing
+os.environ["OPENAI_API_KEY"] = "sk-dummy-key-for-testing"
+os.environ["GEMINI_API_KEY"] = "dummy-key-for-testing"
+
 from credit_scout.tools.detect_intro_end_time import detect_intro_end_time_core
 from credit_scout.tools.detect_outro_start_time import detect_outro_start_time_core
 from credit_scout.tools.encode_intro_segment import encode_intro_segment_core

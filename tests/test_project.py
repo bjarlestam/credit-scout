@@ -5,6 +5,10 @@ from unittest import mock
 # Add the src directory to the path so we can import the project package
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../src")))
 
+# Set dummy API keys for testing
+os.environ["OPENAI_API_KEY"] = "sk-dummy-key-for-testing"
+os.environ["GEMINI_API_KEY"] = "dummy-key-for-testing"
+
 from credit_scout.main import cli
 
 
