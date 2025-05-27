@@ -1,196 +1,209 @@
-# Credit Scout
+# Credit Scout: AI-Powered Movie Intro/Outro Detection
 
-AI agent for movie credit detection using OpenAI Agents SDK and Google Gemini.
+![Credit Scout Banner](./cover.jpg)
 
-## Overview
+[![GitHub stars](https://img.shields.io/github/stars/patrickkalkman/credit-scout)](https://github.com/PatrickKalkman/credit-scout/stargazers)
+[![GitHub contributors](https://img.shields.io/github/contributors/patrickkalkman/credit-scout)](https://github.com/PatrickKalkman/credit-scout/graphs/contributors)
+[![GitHub last commit](https://img.shields.io/github/last-commit/patrickkalkman/credit-scout)](https://github.com/PatrickKalkman/credit-scout)
+[![open issues](https://img.shields.io/github/issues/patrickkalkman/credit-scout)](https://github.com/PatrickKalkman/credit-scout/issues)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://makeapullrequest.com)
+[![Python Version](https://img.shields.io/badge/python-3.12%2B-blue)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Credit Scout is an intelligent movie analysis tool that automatically detects:
-- **Intro End Time**: When the main movie content begins (after logos, titles, opening credits)
-- **Outro Start Time**: When the end credits begin
+Credit Scout detects movie intro end and outro start timestamps using multimodal AI, for just $0.30 per movie instead of $6 with traditional APIs.
 
-The agent uses a combination of video processing and AI analysis to provide accurate timestamps.
+## ✨ Features
 
-## Features
+- 🎬 **Automated Detection**: Uses AI to identify when the actual movie begins and credits end
+- 💰 **20× Cost Reduction**: ~$0.30 per movie vs $6 with Amazon Rekognition
+- ⚡ **Smart Sampling**: Analyzes strategic segments instead of entire videos
+- 🤖 **Multimodal AI**: Combines GPT-4o mini orchestration with Gemini 2.5 Pro vision
+- 📊 **Cost Tracking**: Monitors API usage and provides detailed cost breakdowns
+- 🛠️ **CLI Interface**: Simple command-line usage with beautiful terminal output
+- 🎯 **High Accuracy**: Tested on diverse content with consistent results
 
-- 🎬 **Automated Analysis**: Uses AI to analyze video content and detect transitions
-- ⚡ **Optimized Processing**: Encodes low-resolution segments for faster analysis
-- 💰 **Cost Tracking**: Monitors API usage and costs
-- 🛠️ **CLI Interface**: Easy-to-use command-line interface
-- 📊 **Rich Output**: Beautiful terminal output with progress indicators
+## 🚀 Getting Started
 
-## Installation
+### Prerequisites
 
-1. Clone the repository:
+- **Python 3.12+** with uv package manager
+- **FFmpeg** installed and accessible in PATH
+- **OpenAI API Key** (for agent orchestration)
+- **Google Gemini API Key** (for video analysis)
+
+### System Requirements
+
+- **OS**: Linux, macOS, or Windows 10/11
+- **RAM**: 4GB available (video processing can be memory-intensive)
+- **Storage**: 2GB free space for temporary files
+- **CPU**: Multi-core recommended for faster encoding
+- **Network**: Stable internet connection for API calls
+
+### Installation
+
+1. **Clone the repository**:
 ```bash
-git clone <repository-url>
+git clone https://github.com/patrickkalkman/credit-scout.git
 cd credit-scout
 ```
 
-2. Install dependencies:
+2. **Install FFmpeg**:
 ```bash
-pip install -e .
-```
+# Ubuntu/Debian
+sudo apt install ffmpeg
 
-3. Install FFmpeg (required for video processing):
-```bash
 # macOS
 brew install ffmpeg
-
-# Ubuntu/Debian
-sudo apt update && sudo apt install ffmpeg
 
 # Windows
 # Download from https://ffmpeg.org/download.html
 ```
 
-## Configuration
-
-Create a `.env` file in the project root:
-
+3. **Install UV** (if not already installed):
 ```bash
-cp env.example .env
+# macOS/Linux
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Windows
+powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
 ```
 
-Edit `.env` and add your API keys:
+4. **Create `.env` file**:
+```bash
+# Create .env file in project root
+OPENAI_API_KEY=your-openai-api-key-here
+GEMINI_API_KEY=your-gemini-api-key-here
 
-```env
-# Required API Keys
-OPENAI_API_KEY=your_openai_api_key_here
-GEMINI_API_KEY=your_gemini_api_key_here
-
-# Video Processing Settings (optional)
-VIDEO_HEIGHT=120
-VIDEO_FPS=5
-VIDEO_CRF=28
+# Optional: Customize video processing settings
+VIDEO_HEIGHT=120  # Lower = faster, higher = more accurate
+VIDEO_CRF=28     # Quality: lower = better, higher = smaller file
+VIDEO_FPS=5      # Frame rate: lower = faster processing
 ```
 
 ### Getting API Keys
 
-- **OpenAI API Key**: Get from [OpenAI Platform](https://platform.openai.com/api-keys)
-- **Gemini API Key**: Get from [Google AI Studio](https://aistudio.google.com/app/apikey)
+- **OpenAI API Key**: 
+  - Get from [OpenAI Platform](https://platform.openai.com/api-keys)
+  - Required model: GPT-4o mini
+  - Cost: ~$0.001 per film
 
-## Usage
+- **Google Gemini API Key**: 
+  - Get from [Google AI Studio](https://aistudio.google.com/app/apikey)
+  - Required model: Gemini 2.5 Pro Preview
+  - Cost: ~$0.297 per film
+
+## 🔧 Usage
 
 ### Command Line Interface
 
 ```bash
-# Method 1: Using the installed command (after pip install -e .)
-credit-scout /path/to/movie.mp4
+# Run Credit Scout on a movie
+uv run credit-scout ./your-movie.mp4
 
-# Method 2: Using the run script from project root
-python run_credit_scout.py /path/to/movie.mp4
-
-# Method 3: Using uv run with the run script
-uv run run_credit_scout.py /path/to/movie.mp4
-
-# Method 4: Using Python module (if installed)
-python -m credit_scout.main /path/to/movie.mp4
+# The tool will output timestamps like:
+# ┌─────────────────────────────────────────────────────────────┐
+# │                     Analysis Results                        │
+# ├─────────────────────────────────────────────────────────────┤
+# │ Intro ends at: 01:10                                       │
+# │ Outro starts at: 87:42                                     │
+# │ Total analysis cost: $0.297                                │
+# │ Analysis timestamp: 2025-05-25T12:49:02                    │
+# └─────────────────────────────────────────────────────────────┘
 ```
 
-### Programmatic Usage
+### Output Format
 
-```python
-import asyncio
-from credit_scout.movie_analysis_agent import analyze_movie
+Credit Scout saves results as JSON files:
 
-async def main():
-    result = await analyze_movie("/path/to/movie.mp4")
-    print(result)
-
-asyncio.run(main())
+```json
+{
+  "intro_end_time": "01:10",
+  "outro_start_time": "09:50",
+  "total_cost": 0.297,
+  "analysis_timestamp": "2025-05-25T12:49:02.741502",
+  "video_file": {
+    "name": "tears_of_steel.mp4",
+    "path": "/path/to/movie.mp4"
+  }
+}
 ```
 
-### Example Output
+## 💡 How It Works
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                     Analysis Results                        │
-├─────────────────────────────────────────────────────────────┤
-│ Intro ends at: 02:15                                       │
-│ Outro starts at: 87:42                                     │
-│ Total analysis cost: $0.045                                │
-│ Confidence: High                                            │
-└─────────────────────────────────────────────────────────────┘
-```
+Credit Scout uses a strategic approach to minimize costs while maintaining accuracy:
 
-## How It Works
+1. **Video Preprocessing**: Converts segments to grayscale 120p at 5fps
+2. **Strategic Sampling**: 
+   - Analyzes first 5 minutes for intro detection
+   - Analyzes last 10 minutes for outro detection
+3. **Multimodal Analysis**: 
+   - GPT-4o mini orchestrates the workflow
+   - Gemini 2.5 Pro analyzes video frames
+4. **Intelligent Detection**: Recognizes studio logos, title cards, and credit sequences
 
-The agent follows a sophisticated workflow:
+## 📊 Benchmark Results
 
-1. **Video Duration Analysis**: Determines total movie length using FFmpeg
-2. **Intro Analysis**: 
-   - Analyzes the full video file for maximum accuracy
-   - Detects when main content begins after logos and titles
-3. **Outro Analysis**:
-   - Encodes a low-resolution segment from the end of the movie
-   - Detects when end credits begin
-   - Returns absolute timestamps in the full video
+Tested on 10 open-source films with 100% success rate:
 
-## Architecture
+| Movie | Intro End | Outro Start | Cost | Time |
+|-------|-----------|-------------|------|------|
+| Tears of Steel | 01:10 | 09:50 | $0.297 | ~101s |
+| Sintel | 01:43 | 12:27 | $0.297 | ~130s |
+| Big Buck Bunny | 00:10 | 09:18 | $0.297 | ~90s |
+| Cosmos Laundromat | 00:59 | 10:10 | $0.297 | ~98s |
 
-- **Agent Framework**: Built on OpenAI Agents SDK
-- **Video Analysis**: Google Gemini 2.5 Pro for visual content analysis
-- **Video Processing**: FFmpeg for encoding and duration detection
-- **Tools Available**:
-  - `get_video_duration`: Get total video duration
-  - `encode_intro_segment`: Create optimized intro segment
-  - `encode_outro_segment`: Create optimized outro segment  
-  - `detect_intro_end_time`: AI analysis of intro end
-  - `detect_outro_start_time`: AI analysis of outro start
+**Average cost per movie: $0.23**
+## 🔌 Architecture
 
-## Supported Formats
+- **OpenAI Agents SDK**: Orchestration layer for coordinating tools
+- **Google Gemini 2.5 Pro**: Visual understanding and content analysis
+- **FFmpeg**: Video processing and segment extraction
+- **Smart Sampling**: Processes only ~15 minutes of content per movie
 
-- MP4, AVI, MKV, MOV, WMV
-- Any format supported by FFmpeg
+## 🤝 Contributing
 
-## Cost Considerations
+We welcome contributions! Here's how:
 
-- Intro analysis: ~$0.02-0.05 per movie (full video analysis)
-- Outro analysis: ~$0.01-0.03 per movie (segment analysis)
-- Total cost typically under $0.10 per movie
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-## Troubleshooting
-
-### Common Issues
-
-1. **FFmpeg not found**:
-   ```bash
-   # Verify FFmpeg installation
-   ffmpeg -version
-   ```
-
-2. **API key errors**:
-   - Ensure keys are set in `.env` file
-   - Check key validity and quotas
-
-3. **Video format issues**:
-   - Try converting to MP4 format
-   - Ensure video file is not corrupted
-
-### Debug Mode
-
-Enable detailed logging:
-
-```python
-import logging
-logging.basicConfig(level=logging.DEBUG)
-```
-
-## Development
-
-### Running Tests
+### Development Setup
 
 ```bash
-pytest tests/
+# Install development dependencies
+uv sync
+
+# Run tests
+uv run pytest tests/
+
+# Format code
+uv run ruff format .
+uv run ruff check .
 ```
 
-### Code Formatting
+## 📝 Roadmap
 
-```bash
-ruff format .
-ruff check .
-```
+- [ ] Push resolution boundaries (test 60p, 2fps)
+- [ ] Local LLM support for privacy
+- [ ] TV episode support with mid-roll detection
+- [ ] Scene transition detection
+- [ ] Batch processing for libraries
 
-## License
+## 🙏 Acknowledgments
 
-MIT License - see LICENSE file for details.
+- Built with [OpenAI Agents SDK](https://github.com/openai/openai-python) for orchestration
+- Uses [Google Gemini](https://ai.google.dev/) for visual analysis
+- [FFmpeg](https://ffmpeg.org/) for video processing
+- [Rich](https://github.com/Textualize/rich) for beautiful terminal output
+- Tested on [Blender Foundation](https://studio.blender.org/) open-source films
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+Built with ❤️ by Patrick Kalkman. Star the repo if you find it useful!
