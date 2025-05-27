@@ -36,6 +36,8 @@ lint.ignore = ["E272"]
 target-version = "py312"
 # Line length matches black's default
 line-length = 120
+# Exclude tests directory from linting
+lint.exclude = ["tests/**"]
 
 [tool.ruff.format]
 preview = true
