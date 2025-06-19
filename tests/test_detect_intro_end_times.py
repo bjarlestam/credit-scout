@@ -9,11 +9,11 @@ import pytest
 # Add the src directory to the path so we can import the project package
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../src")))
 
-from credit_scout.tools.detect_intro_end_time import detect_intro_end_time_core, GeminiClient
+from credit_scout.tools.detect_intro_times import detect_intro_times_core, GeminiClient
 
 
-class TestDetectIntroEndTime:
-    """Test suite for intro end time detection functionality."""
+class TestDetectIntroTimes:
+    """Test suite for intro start and end time detection functionality."""
 
     @pytest.fixture
     def test_data_dir(self):
@@ -29,32 +29,32 @@ class TestDetectIntroEndTime:
         else:
             pytest.skip(f"Sample video not found at {video_path}. Please add test video files.")
 
-    def test_detect_intro_end_time_core_exists(self):
-        """Test that the detect_intro_end_time_core function exists and is callable."""
-        assert callable(detect_intro_end_time_core)
+    def test_detect_intro_times_core_exists(self):
+        """Test that the detect_intro_times_core function exists and is callable."""
+        assert callable(detect_intro_times_core)
 
     def test_gemini_client_exists(self):
         """Test that the GeminiClient class exists and is instantiable."""
         assert GeminiClient is not None
 
-    def test_detect_intro_end_time_with_nonexistent_file(self):
+    def test_detect_intro_times_with_nonexistent_file(self):
         """Test that function returns None for non-existent input file."""
-        result = detect_intro_end_time_core("/path/to/nonexistent/file.mp4")
+        result = detect_intro_times_core("/path/to/nonexistent/file.mp4")
         assert result is None
 
-    def test_detect_intro_end_time_with_directory(self):
+    def test_detect_intro_times_with_directory(self):
         """Test that function returns None when input is a directory."""
         with tempfile.TemporaryDirectory() as temp_dir:
-            result = detect_intro_end_time_core(temp_dir)
+            result = detect_intro_times_core(temp_dir)
             assert result is None
 
-    def test_detect_intro_end_time_with_empty_file(self):
+    def test_detect_intro_times_with_empty_file(self):
         """Test that function handles empty files gracefully."""
         with tempfile.TemporaryDirectory() as temp_dir:
             empty_file = Path(temp_dir) / "empty.mp4"
             empty_file.touch()
 
-            result = detect_intro_end_time_core(str(empty_file))
+            result = detect_intro_times_core(str(empty_file))
             assert result is None
 
     def test_gemini_client_initialization_without_api_key(self):
@@ -100,39 +100,43 @@ class TestDetectIntroEndTime:
             assert cost_data["total_cost"] > 0
 
     @pytest.mark.integration
-    def test_detect_intro_end_time_with_valid_video_and_api_key(self, sample_video_path):
+    def test_detect_intro_times_with_valid_video_and_api_key(self, sample_video_path):
         """Integration test with actual video file and API key (requires GEMINI_API_KEY)."""
         if not os.getenv("GEMINI_API_KEY"):
             pytest.skip("GEMINI_API_KEY environment variable not set")
 
         # This test would actually call the Gemini API
         # Only run if explicitly requested and API key is available
-        result = detect_intro_end_time_core(sample_video_path)
+        result = detect_intro_times_core(sample_video_path)
 
         if result is not None:
             # Verify the result structure
             assert isinstance(result, dict)
-            assert "timestamp" in result
+            assert "intro_start" in result
+            assert "intro_end" in result
             assert "confidence" in result
             assert "cost" in result
             assert "tokens_used" in result
 
             # Verify timestamp format (should be MM:SS)
-            timestamp = result["timestamp"]
-            assert isinstance(timestamp, str)
+            intro_start = result["intro_start"]
+            intro_end = result["intro_end"]
+            assert isinstance(intro_start, str)
+            assert isinstance(intro_end, str)
             # Basic format check - should contain a colon
-            assert ":" in timestamp
+            assert ":" in intro_start
+            assert ":" in intro_end
 
-    def test_detect_intro_end_time_default_parameters(self):
+    def test_detect_intro_times_default_parameters(self):
         """Test that function accepts default parameters correctly."""
         # This should fail gracefully with non-existent file
-        result = detect_intro_end_time_core("nonexistent.mp4")
+        result = detect_intro_times_core("nonexistent.mp4")
         assert result is None
 
-    def test_detect_intro_end_time_with_custom_api_key(self):
+    def test_detect_intro_times_with_custom_api_key(self):
         """Test that function accepts custom API key parameter."""
         # This should fail gracefully with non-existent file, but test parameter passing
-        result = detect_intro_end_time_core("nonexistent.mp4", api_key="custom_key")
+        result = detect_intro_times_core("nonexistent.mp4", api_key="custom_key")
         assert result is None
 
 

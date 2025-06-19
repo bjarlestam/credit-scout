@@ -67,10 +67,10 @@ class GeminiClient:
             console.print(f"[red]❌ Upload failed: {str(e)}[/red]")
             raise
 
-    def detect_film_start(self, video_file: types.File) -> Dict[str, float]:
-        """Detect the start timestamp of the main film content."""
-        logger.info("Detecting film start timestamp...")
-        console.print("[blue]🎯 Analyzing video for intro end time...[/blue]")
+    def detect_intro_times(self, video_file: types.File) -> Dict[str, float]:
+        """Detect both the intro start and intro end timestamps in the intro segment."""
+        logger.info("Detecting intro start and end timestamps...")
+        console.print("[blue]🎯 Analyzing video for intro start and end times...[/blue]")
 
         model = "gemini-2.5-pro-preview-05-06"
         contents = [
@@ -87,9 +87,13 @@ class GeminiClient:
                 role="user",
                 parts=[
                     types.Part.from_text(
-                        text="""Analyze this video clip from the beginning of a film. Identify the exact timestamp
-                          (in MM:SS format) where the first scene of the main, continuous narrative body of the film
-                          begins. This point must occur after the full conclusion of ALL of the following elements:
+                        text="""Analyze this video clip from the beginning of a film. 
+                        Detect the start and end times of the intro sequence.
+                        1. Identify the exact timestamp (in MM:SS format) where the intro sequence begins. The intro sequence may include the following elements:
+                        - Studio logos and distributor cards (e.g., "splendid film").
+                        - The main title card of the film itself (e.g., "BLACK BEAR").
+                        2. Identify the exact timestamp (in MM:SS format) of where the intro ends. This is where the first scene of the main, continuous narrative body of the film begins. 
+                        This point must occur after the full conclusion of ALL of the following elements:
 All studio logos and distributor cards (e.g., "splendid film").
 The main title card of the film itself (e.g., "BLACK BEAR").
 All subsequent production company cards, "presents" cards, or "in association with" cards.
@@ -102,8 +106,11 @@ primary storyline, not including any brief prologue or thematic vignette that mi
                 role="user",
                 parts=[
                     types.Part.from_text(
-                        text="""Only return the timestamp in MM:SS format. Do not include any other text or explanation.
-                        For example, if the first scene begins at 1 minute and 30 seconds, simply return "01:30"."""
+                        text="""Return the timestamps in MM:SS format. Do not include any other text or explanation.
+                        For example, if the intro starts at 00:00 and ends at 00:45, simply return "
+                        intro_start: 00:00
+                        intro_end: 00:45"
+                        """
                     ),
                 ],
             ),
@@ -138,13 +145,26 @@ primary storyline, not including any brief prologue or thematic vignette that mi
             logger.info(f"Output cost: ${cost_data['output_cost']:.6f}")
             logger.info(f"Total API call cost: ${cost_data['total_cost']:.6f}")
 
-            timestamp = response.text.strip()
-            logger.info(f"Film start detected at: {timestamp}")
-            console.print(f"[green]🎬 Intro ends at: {timestamp}[/green]")
+            # Parse Gemini response for both timestamps
+            text = response.text.strip()
+            intro_start = None
+            intro_end = None
+            for line in text.splitlines():
+                if line.lower().startswith("intro_start:"):
+                    intro_start = line.split(":", 1)[1].strip()
+                elif line.lower().startswith("intro_end:"):
+                    intro_end = line.split(":", 1)[1].strip()
+            if not intro_start or not intro_end:
+                raise ValueError(f"Could not parse both intro_start and intro_end from Gemini response: {text}")
+
+            logger.info(f"Intro start detected at: {intro_start}")
+            logger.info(f"Intro end detected at: {intro_end}")
+            console.print(f"[green]🎬 Intro starts at: {intro_start} | Intro ends at: {intro_end}[/green]")
             console.print(f"[dim]Total cost: ${cost_data['total_cost']:.6f}[/dim]")
 
             return {
-                "timestamp": timestamp,
+                "intro_start": intro_start,
+                "intro_end": intro_end,
                 "confidence": 1.0,  # Default confidence
                 "cost": cost_data["total_cost"],
                 "tokens_used": response.usage_metadata.total_token_count,
@@ -182,62 +202,45 @@ primary storyline, not including any brief prologue or thematic vignette that mi
             logger.warning(f"Failed to cleanup file {video_file.name}: {e}")
 
 
-def detect_intro_end_time_core(video_file_path: str, api_key: Optional[str] = None) -> Optional[Dict[str, float]]:
+def detect_intro_times_core(video_file_path: str, api_key: Optional[str] = None) -> Optional[Dict[str, float]]:
     """
-    Detect the end time of the intro sequence in a video file using Gemini API.
-
+    Detect both the start and end time of the intro sequence in a video file using Gemini API.
     Args:
         video_file_path: Path to the input video file
         api_key: Optional Gemini API key (if not provided, uses GEMINI_API_KEY env var)
-
     Returns:
-        Dictionary containing timestamp, confidence, cost, and tokens_used, or None if detection failed
+        Dictionary containing intro_start, intro_end, confidence, cost, and tokens_used, or None if detection failed
     """
     from pathlib import Path
-
-    # Validate input file
     input_path = Path(video_file_path)
     if not input_path.exists():
         logger.error(f"Input video file does not exist: {video_file_path}")
         console.print(f"[red]❌ Input video file not found: {video_file_path}[/red]")
         return None
-
     if not input_path.is_file():
         logger.error(f"Input path is not a file: {video_file_path}")
         console.print(f"[red]❌ Input path is not a file: {video_file_path}[/red]")
         return None
-
-    logger.info(f"Starting intro end time detection for: {video_file_path}")
+    logger.info(f"Starting intro times detection for: {video_file_path}")
     console.print(f"[blue]🎬 Analyzing video: {input_path.name}[/blue]")
-
     try:
-        # Initialize Gemini client
         client = GeminiClient(api_key=api_key)
-
-        # Upload and process the video file
         video_file = client.upload_and_process_file(video_file_path)
-
         try:
-            # Detect the film start timestamp
-            result = client.detect_film_start(video_file)
-
-            logger.success(f"Successfully detected intro end time: {result['timestamp']}")
-            console.print("[green]✅ Intro end time detection completed![/green]")
-
+            result = client.detect_intro_times(video_file)
+            logger.success(f"Successfully detected intro times: start={result['intro_start']}, end={result['intro_end']}")
+            console.print("[green]✅ Intro times detection completed![/green]")
             return result
-
         finally:
-            # Always cleanup the uploaded file
             client.cleanup_file(video_file)
-
     except ValueError as e:
         logger.error(f"Configuration error: {e}")
         console.print(f"[red]❌ Configuration error: {str(e)}[/red]")
         return None
     except Exception as e:
-        logger.error(f"Unexpected error during intro end time detection: {str(e)}")
+        logger.error(f"Unexpected error during intro times detection: {str(e)}")
         console.print(f"[red]❌ Unexpected error: {str(e)}[/red]")
         return None
 
 
-detect_intro_end_time = function_tool(detect_intro_end_time_core)
+detect_intro_times = function_tool(detect_intro_times_core)

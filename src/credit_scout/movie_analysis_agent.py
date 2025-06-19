@@ -9,7 +9,7 @@ from rich.console import Console
 
 # Import all the available function tools
 try:
-    from credit_scout.tools.detect_intro_end_time import detect_intro_end_time
+    from credit_scout.tools.detect_intro_times import detect_intro_times, detect_intro_times
     from credit_scout.tools.detect_outro_start_time import detect_outro_start_time
     from credit_scout.tools.encode_intro_segment import encode_intro_segment
     from credit_scout.tools.encode_outro_segment import encode_outro_segment
@@ -21,7 +21,7 @@ except ImportError:
 
     src_dir = Path(__file__).parent.parent
     sys.path.insert(0, str(src_dir))
-    from credit_scout.tools.detect_intro_end_time import detect_intro_end_time
+    from credit_scout.tools.detect_intro_times import detect_intro_times, detect_intro_times
     from credit_scout.tools.detect_outro_start_time import detect_outro_start_time
     from credit_scout.tools.encode_intro_segment import encode_intro_segment
     from credit_scout.tools.encode_outro_segment import encode_outro_segment
@@ -61,7 +61,7 @@ MOVIE_ANALYSIS_TOOLS = [
     get_video_duration,
     encode_intro_segment,
     encode_outro_segment,
-    detect_intro_end_time,
+    detect_intro_times,
     detect_outro_start_time,
     save_analysis_results,
 ]
@@ -70,8 +70,8 @@ MOVIE_ANALYSIS_TOOLS = [
 agent = Agent(
     name="MovieAnalysisAgent",
     instructions=(
-        "You are a specialized movie analysis agent that determines the intro end time and outro start time "
-        "for movie files. Your goal is to provide accurate timestamps for when the main movie content begins "
+        "You are a specialized movie analysis agent that determines the intro start time, intro end time, and outro start time "
+        "for movie files. Your goal is to provide accurate timestamps for when the intro sequence begins, when the main movie content begins, "
         "and when the end credits start.\n\n"
         "Follow this precise workflow:\n\n"
         "1. **Get Video Duration**: Use `get_video_duration` to determine the total duration of the movie file. "
@@ -79,8 +79,8 @@ agent = Agent(
         "2. **Analyze Intro**: \n"
         "   - Use `encode_intro_segment` to create a low-resolution segment from the beginning of the movie "
         "     (default: first 5 minutes). This optimizes the analysis for speed and cost.\n"
-        "   - Use `detect_intro_end_time` with the encoded intro segment to determine when the main movie "
-        "     content begins (after all logos, titles, and opening credits).\n\n"
+        "   - Use `detect_intro_times` with the encoded intro segment to determine both when the intro sequence begins (first logo/title) "
+        "     and when the main movie content begins (after all logos, titles, and opening credits).\n\n"
         "3. **Analyze Outro**: \n"
         "   - Use `encode_outro_segment` to create a low-resolution segment from the end of the movie "
         "     (default: last 10 minutes). This captures the transition from movie to credits.\n"
@@ -94,10 +94,11 @@ agent = Agent(
         "- The outro analysis works on an encoded segment of the outro for efficiency, but return absolute timestamps\n"
         "- All timestamps should be in MM:SS format\n"
         "- Handle errors gracefully and provide clear feedback about any failures\n"
-        "- Report both the intro end time and outro start time in your final response\n"
+        "- Report the intro start time, intro end time, and outro start time in your final response\n"
         "- Include cost information and confidence levels when available\n"
         "- Always save the results to a JSON file for future reference\n\n"
         "Your final response should clearly state:\n"
+        "- Intro starts at: [timestamp]\n"
         "- Intro ends at: [timestamp]\n"
         "- Outro starts at: [timestamp]\n"
         "- Total analysis cost: [cost]\n"
@@ -140,9 +141,9 @@ async def analyze_movie(movie_file_path: str) -> str:
         with trace("Analyzing movie for intro and outro timestamps..."):
             result = await Runner.run(
                 agent,
-                f"Analyze the movie file at '{movie_file_path}' to determine both the intro end time "
+                f"Analyze the movie file at '{movie_file_path}' to determine both the intro start time, intro end time, "
                 f"and outro start time. Follow the complete workflow: get video duration, encode segments "
-                f"as needed, and detect both intro end and outro start timestamps. Provide a comprehensive "
+                f"as needed, and detect both intro start, intro end, and outro start timestamps. Provide a comprehensive "
                 f"analysis with clear timestamps and cost information.",
             )
 

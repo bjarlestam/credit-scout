@@ -34,7 +34,7 @@ sys.path.insert(0, str(src_path))
 os.environ["OPENAI_API_KEY"] = "sk-dummy-key-for-testing"
 os.environ["GEMINI_API_KEY"] = "dummy-key-for-testing"
 
-from credit_scout.tools.detect_intro_end_time import detect_intro_end_time_core
+from credit_scout.tools.detect_intro_times import detect_intro_times_core
 from credit_scout.tools.detect_outro_start_time import detect_outro_start_time_core
 from credit_scout.tools.encode_intro_segment import encode_intro_segment_core
 from credit_scout.tools.encode_outro_segment import encode_outro_segment_core
@@ -97,7 +97,7 @@ def test_detect_intro(args):
         sys.exit(1)
     print("-" * 60)
     
-    result = detect_intro_end_time_core(
+    result = detect_intro_times_core(
         video_file_path=args.video_path,
         api_key=args.api_key
     )

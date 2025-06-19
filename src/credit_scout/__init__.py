@@ -11,7 +11,7 @@ from .__version__ import __version__
 try:
     from .movie_analysis_agent import analyze_movie  # noqa: F401
     from .tools import (  # noqa: F401
-        detect_intro_end_time,
+        detect_intro_times,
         detect_outro_start_time,
         encode_intro_segment,
         encode_outro_segment,
@@ -22,7 +22,7 @@ try:
     __all__ = [
         "__version__",
         "analyze_movie",
-        "detect_intro_end_time",
+        "detect_intro_times",
         "detect_outro_start_time",
         "encode_intro_segment", 
         "encode_outro_segment",
