@@ -98,7 +98,7 @@ VIDEO_FPS=5      # Frame rate: lower = faster processing
 
 ```bash
 # Run Credit Scout on a movie
-uv run credit-scout ./your-movie.mp4
+uv run run.py ./your-movie.mp4
 
 # The tool will output timestamps like:
 # ┌─────────────────────────────────────────────────────────────┐
