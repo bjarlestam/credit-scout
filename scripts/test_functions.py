@@ -26,6 +26,12 @@ import os
 import sys
 from pathlib import Path
 
+from credit_scout.tools.detect_intro_times import detect_intro_times_core
+from credit_scout.tools.detect_outro_start_time import detect_outro_start_time_core
+from credit_scout.tools.encode_intro_segment import encode_intro_segment_core
+from credit_scout.tools.encode_outro_segment import encode_outro_segment_core
+from credit_scout.tools.get_video_duration import get_video_duration_core
+
 # Add the src directory to the path
 src_path = Path(__file__).parent.parent / "src"
 sys.path.insert(0, str(src_path))
@@ -33,12 +39,6 @@ sys.path.insert(0, str(src_path))
 # Set dummy API keys for testing
 os.environ["OPENAI_API_KEY"] = "sk-dummy-key-for-testing"
 os.environ["GEMINI_API_KEY"] = "dummy-key-for-testing"
-
-from credit_scout.tools.detect_intro_times import detect_intro_times_core
-from credit_scout.tools.detect_outro_start_time import detect_outro_start_time_core
-from credit_scout.tools.encode_intro_segment import encode_intro_segment_core
-from credit_scout.tools.encode_outro_segment import encode_outro_segment_core
-from credit_scout.tools.get_video_duration import get_video_duration_core
 
 
 def test_encode_intro(args):

@@ -42,12 +42,14 @@ Credit Scout detects movie intro end and outro start timestamps using multimodal
 ### Installation
 
 1. **Clone the repository**:
+
 ```bash
 git clone https://github.com/patrickkalkman/credit-scout.git
 cd credit-scout
 ```
 
 2. **Install FFmpeg**:
+
 ```bash
 # Ubuntu/Debian
 sudo apt install ffmpeg
@@ -60,6 +62,7 @@ brew install ffmpeg
 ```
 
 3. **Install UV** (if not already installed):
+
 ```bash
 # macOS/Linux
 curl -LsSf https://astral.sh/uv/install.sh | sh
@@ -69,6 +72,7 @@ powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
 ```
 
 4. **Create `.env` file**:
+
 ```bash
 # Create .env file in project root
 OPENAI_API_KEY=your-openai-api-key-here
@@ -82,12 +86,13 @@ VIDEO_FPS=5      # Frame rate: lower = faster processing
 
 ### Getting API Keys
 
-- **OpenAI API Key**: 
+- **OpenAI API Key**:
+
   - Get from [OpenAI Platform](https://platform.openai.com/api-keys)
   - Required model: GPT-4o mini
   - Cost: ~$0.001 per film
 
-- **Google Gemini API Key**: 
+- **Google Gemini API Key**:
   - Get from [Google AI Studio](https://aistudio.google.com/app/apikey)
   - Required model: Gemini 2.5 Pro Preview
   - Cost: ~$0.297 per film
@@ -104,6 +109,7 @@ uv run run.py ./your-movie.mp4
 # ┌─────────────────────────────────────────────────────────────┐
 # │                     Analysis Results                        │
 # ├─────────────────────────────────────────────────────────────┤
+# │ Intro starts at: 00:00                                     │
 # │ Intro ends at: 01:10                                       │
 # │ Outro starts at: 87:42                                     │
 # │ Total analysis cost: $0.297                                │
@@ -117,6 +123,7 @@ Credit Scout saves results as JSON files:
 
 ```json
 {
+  "intro_start_time": "00:00",
   "intro_end_time": "01:10",
   "outro_start_time": "09:50",
   "total_cost": 0.297,
@@ -133,10 +140,10 @@ Credit Scout saves results as JSON files:
 Credit Scout uses a strategic approach to minimize costs while maintaining accuracy:
 
 1. **Video Preprocessing**: Converts segments to grayscale 120p at 5fps
-2. **Strategic Sampling**: 
-   - Analyzes first 5 minutes for intro detection
+2. **Strategic Sampling**:
+   - Analyzes first 5 minutes for intro detection (both start and end times)
    - Analyzes last 10 minutes for outro detection
-3. **Multimodal Analysis**: 
+3. **Multimodal Analysis**:
    - GPT-4o mini orchestrates the workflow
    - Gemini 2.5 Pro analyzes video frames
 4. **Intelligent Detection**: Recognizes studio logos, title cards, and credit sequences
@@ -145,14 +152,15 @@ Credit Scout uses a strategic approach to minimize costs while maintaining accur
 
 Tested on 10 open-source films with 100% success rate:
 
-| Movie | Intro End | Outro Start | Cost | Time |
-|-------|-----------|-------------|------|------|
-| Tears of Steel | 01:10 | 09:50 | $0.297 | ~101s |
-| Sintel | 01:43 | 12:27 | $0.297 | ~130s |
-| Big Buck Bunny | 00:10 | 09:18 | $0.297 | ~90s |
-| Cosmos Laundromat | 00:59 | 10:10 | $0.297 | ~98s |
+| Movie             | Intro End | Outro Start | Cost   | Time  |
+| ----------------- | --------- | ----------- | ------ | ----- |
+| Tears of Steel    | 01:10     | 09:50       | $0.297 | ~101s |
+| Sintel            | 01:43     | 12:27       | $0.297 | ~130s |
+| Big Buck Bunny    | 00:10     | 09:18       | $0.297 | ~90s  |
+| Cosmos Laundromat | 00:59     | 10:10       | $0.297 | ~98s  |
 
 **Average cost per movie: $0.23**
+
 ## 🔌 Architecture
 
 - **OpenAI Agents SDK**: Orchestration layer for coordinating tools

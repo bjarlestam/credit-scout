@@ -9,7 +9,7 @@ from rich.console import Console
 
 # Import all the available function tools
 try:
-    from credit_scout.tools.detect_intro_times import detect_intro_times, detect_intro_times
+    from credit_scout.tools.detect_intro_times import detect_intro_times
     from credit_scout.tools.detect_outro_start_time import detect_outro_start_time
     from credit_scout.tools.encode_intro_segment import encode_intro_segment
     from credit_scout.tools.encode_outro_segment import encode_outro_segment
@@ -21,7 +21,7 @@ except ImportError:
 
     src_dir = Path(__file__).parent.parent
     sys.path.insert(0, str(src_dir))
-    from credit_scout.tools.detect_intro_times import detect_intro_times, detect_intro_times
+    from credit_scout.tools.detect_intro_times import detect_intro_times
     from credit_scout.tools.detect_outro_start_time import detect_outro_start_time
     from credit_scout.tools.encode_intro_segment import encode_intro_segment
     from credit_scout.tools.encode_outro_segment import encode_outro_segment
