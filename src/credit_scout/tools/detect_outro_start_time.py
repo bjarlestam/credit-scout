@@ -72,7 +72,7 @@ class GeminiClient:
         logger.info("Detecting end credits start timestamp...")
         console.print("[blue]🎯 Analyzing video for credits start time...[/blue]")
 
-        model = "gemini-2.5-pro-preview-05-06"
+        model = "gemini-3-pro-preview"
         contents = [
             types.Content(
                 role="user",
@@ -165,15 +165,13 @@ Essentially, I'm looking for the transition from the film's narrative closure to
 
     def calculate_cost(self, response) -> Dict[str, float]:
         """Calculate the cost of the API call based on token usage."""
-        # Gemini 2.5 Pro Preview pricing (as of December 2024)
-        # Input: $1.25 per 1M tokens (prompts <= 200k tokens)
-        # Output: $10.00 per 1M tokens (prompts <= 200k tokens)
-        # Note: For prompts > 200k tokens, rates are $2.50 input / $15.00 output
-        input_cost_per_million = 1.25
-        output_cost_per_million = 10.00
 
         input_tokens = response.usage_metadata.prompt_token_count
         output_tokens = response.usage_metadata.candidates_token_count
+
+        input_cost_per_million = 4 if input_tokens > 200_000 else 2
+        output_cost_per_million = 18 if input_tokens > 200_000 else 12
+
 
         input_cost = (input_tokens / 1_000_000) * input_cost_per_million
         output_cost = (output_tokens / 1_000_000) * output_cost_per_million
